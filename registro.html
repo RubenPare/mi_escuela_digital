@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Sistema Escolar</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <header>
+        <h1>🏫 Sistema Escolar</h1>
+    </header>
+
+    <main class="login-container">
+        <h2>Crear Cuenta</h2>
+
+        <form class="login-form" id="registroForm">
+            
+            <div class="input-usuario">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ingresá tu nombre" required>
+            </div>
+
+            <div class="input-usuario">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido" placeholder="Ingresá tu apellido" required>
+            </div>
+
+            <div class="input-usuario">
+                <label for="mail">Correo Electrónico</label>
+                <input type="email" id="mail" name="mail" placeholder="Ingresá tu mail" required autocomplete="email">
+            </div>
+
+            <div class="input-usuario">
+                <label for="contraseña">Contraseña</label>
+                <input type="password" id="contraseña" name="contraseña" placeholder="Ingresá tu contraseña" required autocomplete="new-password">
+            </div>
+
+            <!-- Rol por defecto (ej: 2 para alumno o el que corresponda en tu BD) -->
+            <input type="hidden" id="fkrol_id" name="fkrol_id" value="2">
+
+            <button type="submit" class="login-btn">Registrarse</button>
+
+        </form>
+
+        <p class="registro-texto">
+            ¿Ya tenés cuenta? 
+            <a href="login.html" class="registro-link">Iniciá sesión acá</a>
+        </p>
+
+    </main>
+
+    <script type="module" src="js/registro.js"></script>
+
+</body>
+</html>

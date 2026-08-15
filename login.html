@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <header>
+        <h1>🏫 Sistema Escolar</h1>
+    </header>
+
+    <main class="login-container">
+        <h2>Iniciar Sesión</h2>
+
+        <form action="dashboard.html" method="POST" class="login-form" id="loginForm">
+            
+            <div class="input-usuario">
+                <label for="usuario">Usuario</label>
+                <input 
+                    type="text" 
+                    id="inputUsuario" 
+                    name="mail" 
+                    placeholder="Ingresá tu usuario"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="input-usuario">
+                <label for="password">Contraseña</label>
+                <input 
+                    type="password" 
+                    id="inputPass" 
+                    name="password" 
+                    placeholder="Ingresá tu contraseña"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="login-btn">Iniciar Sesión</button>
+
+        </form>
+
+        <p class="registro-texto">
+            ¿No tenés cuenta? 
+            <a href="registro.html" class="registro-link">Registrate acá</a>
+        </p>
+
+    </main>
+
+    <script type="module" src="js/login.js"></script>
+
+</body>
+</html>
