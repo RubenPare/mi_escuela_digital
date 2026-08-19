@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Sistema Escolar</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div>
+            <h1>🏫 Mi Escuela Digital</h1>
+        </div>
+
+        <div class="usuario-info">
+            <span id="nombreUsuario">Usuario</span>
+            <span id="rolUsuario">Rol</span>
+
+            <button id="btnCerrarSesion">
+                Cerrar sesión
+            </button>
+        </div>
+    </header>
+
+
+    <main class="dashboard">
+
+        <section class="bienvenida">
+            <h2 id="tituloBienvenida">
+                Bienvenido
+            </h2>
+
+            <p>
+                Panel de gestión escolar
+            </p>
+        </section>
+
+
+        <section class="menu-grid">
+
+            <button class="menu-card" id="btnAlumnos">
+                <span>👨‍🎓</span>
+                <strong>Alumnos</strong>
+                <small>Gestionar alumnos</small>
+            </button>
+
+
+            <button class="menu-card" id="btnCursos">
+                <span>🏫</span>
+                <strong>Cursos</strong>
+                <small>Gestionar cursos</small>
+            </button>
+
+
+            <button class="menu-card" id="btnMaterias">
+                <span>📚</span>
+                <strong>Materias</strong>
+                <small>Gestionar materias</small>
+            </button>
+
+
+            <button class="menu-card" id="btnInscripciones">
+                <span>📝</span>
+                <strong>Inscripciones</strong>
+                <small>Inscribir alumnos</small>
+            </button>
+
+
+            <button class="menu-card" id="btnAsistencia">
+                <span>📅</span>
+                <strong>Asistencia</strong>
+                <small>Registrar asistencia</small>
+            </button>
+
+
+            <button class="menu-card" id="btnCalificaciones">
+                <span>📊</span>
+                <strong>Calificaciones</strong>
+                <small>Notas de alumnos</small>
+            </button>
+
+
+            <button class="menu-card" id="btnUsuarios">
+                <span>👥</span>
+                <strong>Usuarios</strong>
+                <small>Gestionar usuarios</small>
+            </button>
+
+
+            <button class="menu-card" id="btnComunicados">
+                <span>📢</span>
+                <strong>Comunicados</strong>
+                <small>Mensajes escolares</small>
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="js/dashboard.js"></script>
+
+</body>
+</html>

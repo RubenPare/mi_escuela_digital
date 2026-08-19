@@ -9,8 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
 
             // Capturamos los valores (en tu login.html el input de mail/usuario debe tener name="mail")
-            const mail = document.getElementById("inputUsuario").value; // O el ID correspondiente de tu input de mail
-            const contraseña = document.getElementById("inputPass").value;
+           const mail = document.getElementById("inputUsuario").value.trim();
+const contraseña = document.getElementById("inputPass").value;
+
+console.log("MAIL:", mail);
+console.log("CONTRASEÑA:", contraseña);
 
             const credenciales = {
                 mail: mail,
@@ -29,9 +32,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 const resultado = await response.json();
 
                 if (response.ok) {
-                    alert("¡Login exitoso! Bienvenido " + resultado.usuario.nombre);
-                    window.location.href = "dashboard.html"; // Redirige al panel principal
-                } else {
+
+    sessionStorage.setItem(
+        "usuario",
+        JSON.stringify(resultado.usuario)
+    );
+
+    alert(
+        "¡Login exitoso! Bienvenido " +
+        resultado.usuario.nombre
+    );
+
+    window.location.href = "dashboard.html";
+
+}
+                 else {
                     alert("Error: " + (resultado.detail || "Credenciales incorrectas"));
                 }
 
