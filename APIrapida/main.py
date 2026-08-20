@@ -82,7 +82,29 @@ class AlumnoModel(Base):
         SmallInteger,
         nullable=True
     )
+# ==========================================
+# MODELO DE LA TABLA 'cursos'
+# ==========================================
 
+class CursoModel(Base):
+    __tablename__ = "cursos"
+
+    idcursos = Column(
+        Integer,
+        primary_key=True,
+        index=True,
+        autoincrement=True
+    )
+
+    nivel = Column(
+        Integer,
+        nullable=False
+    )
+
+    division = Column(
+        String(45),
+        nullable=True
+    )
 
 app = FastAPI()
 # ==========================================
@@ -167,6 +189,13 @@ class AlumnoRegistro(BaseModel):
     documento: int
     mail: str | None = None
     fecha_nacimiento: str | None = None
+# ==========================================
+# DATOS DE CURSO
+# ==========================================
+
+class CursoRegistro(BaseModel):
+    nivel: int
+    division: str    
 
 
 # ==========================================
@@ -437,6 +466,91 @@ def registrar_alumno(
 
         }
 
+    }
+# ==========================================
+# CREAR CURSO
+# ==========================================
+
+@app.post("/cursos")
+def registrar_curso(
+    curso: CursoRegistro,
+    db: Session = Depends(get_db)
+):
+
+    nuevo_curso = CursoModel(
+        nivel=curso.nivel,
+        division=curso.division
+    )
+
+    db.add(nuevo_curso)
+    db.commit()
+    db.refresh(nuevo_curso)
+
+    return {
+        "mensaje": "Curso registrado correctamente",
+        "curso": {
+            "idcursos": nuevo_curso.idcursos,
+            "nivel": nuevo_curso.nivel,
+            "division": nuevo_curso.division
+        }
+    }
+# ==========================================
+# LISTAR CURSOS
+# ==========================================
+
+@app.get("/cursos")
+def listar_cursos(
+    db: Session = Depends(get_db)
+):
+
+    cursos = db.query(CursoModel).order_by(
+        CursoModel.nivel,
+        CursoModel.division
+    ).all()
+
+    return [
+        {
+            "idcursos": curso.idcursos,
+            "nivel": curso.nivel,
+            "division": curso.division
+        }
+        for curso in cursos
+    ]
+# ==========================================
+# MODIFICAR CURSO
+# ==========================================
+
+@app.put("/cursos/{curso_id}")
+def modificar_curso(
+    curso_id: int,
+    curso: CursoRegistro,
+    db: Session = Depends(get_db)
+):
+
+    curso_db = db.query(CursoModel).filter(
+        CursoModel.idcursos == curso_id
+    ).first()
+
+    if not curso_db:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Curso no encontrado"
+        )
+
+    curso_db.nivel = curso.nivel
+    curso_db.division = curso.division
+
+    db.commit()
+    db.refresh(curso_db)
+
+    return {
+        "mensaje": "Curso modificado correctamente",
+        "curso": {
+            "idcursos": curso_db.idcursos,
+            "nivel": curso_db.nivel,
+            "division": curso_db.division
+        }
     }
 
 @app.post("/login")
