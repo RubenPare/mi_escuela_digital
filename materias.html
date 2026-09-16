@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestión de Materias</title>
+
+    <link rel="stylesheet" href="./css/materias.css">
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <!-- ENCABEZADO -->
+        <header class="encabezado">
+
+            <div>
+                <h1>Gestión de Materias</h1>
+                <p>Administración de las materias del establecimiento</p>
+            </div>
+
+            <button class="btn-nueva" onclick="abrirModal()">
+                + Nueva Materia
+            </button>
+
+        </header>
+
+
+        <!-- BARRA DE HERRAMIENTAS -->
+        <section class="herramientas">
+
+            <div class="buscador">
+
+                <span class="icono-buscar">🔍</span>
+
+                <input
+                    type="text"
+                    id="buscarMateria"
+                    placeholder="Buscar materia..."
+                    onkeyup="filtrarMaterias()"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- TABLA -->
+        <section class="tabla-contenedor">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Materia</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tablaMaterias">
+
+                    <!-- Las materias se cargan desde la API -->
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- MENSAJE CUANDO NO HAY REGISTROS -->
+        <div id="sinResultados" class="sin-resultados">
+
+            No se encontraron materias.
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL NUEVA / EDITAR MATERIA
+         ===================================================== -->
+
+    <div id="modalMateria" class="modal">
+
+        <div class="modal-contenido">
+
+            <div class="modal-header">
+
+                <h2 id="tituloModal">Nueva Materia</h2>
+
+                <button
+                    class="btn-cerrar"
+                    onclick="cerrarModal()">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <input
+                    type="hidden"
+                    id="idMateria"
+                >
+
+                <label for="nombreMateria">
+                    Nombre de la materia
+                </label>
+
+                <input
+                    type="text"
+                    id="nombreMateria"
+                    maxlength="100"
+                    placeholder="Ej.: Matemática"
+                >
+
+                <div
+                    id="mensajeModal"
+                    class="mensaje-modal">
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn-cancelar"
+                    onclick="cerrarModal()">
+                    Cancelar
+                </button>
+
+                <button
+                    class="btn-guardar"
+                    onclick="guardarMateria()">
+                    Guardar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="./js/materias.js"></script>
+
+</body>
+
+</html>
+
+

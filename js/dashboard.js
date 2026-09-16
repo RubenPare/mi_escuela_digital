@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const usuarioGuardado = sessionStorage.getItem("usuario");
@@ -30,7 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    const nombreRol = roles[usuario.fkrol_id] || "Usuario";
+    const nombreRol =
+        roles[usuario.fkrol_id] || "Usuario";
 
 
     document.getElementById("rolUsuario").textContent =
@@ -52,74 +54,112 @@ document.addEventListener("DOMContentLoaded", () => {
             sessionStorage.removeItem("usuario");
 
             window.location.href = "login.html";
+
         });
 
 
     // =========================
-    // BOTONES
+    // ALUMNOS
     // =========================
 
     document
         .getElementById("btnAlumnos")
         .addEventListener("click", () => {
 
-            alert("Módulo Alumnos próximamente");
+            window.location.href = "alumnos.html";
+
         });
 
+
+    // =========================
+    // CURSOS
+    // =========================
 
     document
         .getElementById("btnCursos")
         .addEventListener("click", () => {
 
-            alert("Módulo Cursos próximamente");
+            window.location.href = "cursos.html";
+
         });
 
+
+    // =========================
+    // MATERIAS
+    // =========================
 
     document
         .getElementById("btnMaterias")
         .addEventListener("click", () => {
 
             alert("Módulo Materias próximamente");
+
         });
 
+
+    // =========================
+    // INSCRIPCIONES
+    // =========================
 
     document
         .getElementById("btnInscripciones")
         .addEventListener("click", () => {
 
             alert("Módulo Inscripciones próximamente");
+
         });
 
+
+    // =========================
+    // ASISTENCIA
+    // =========================
 
     document
         .getElementById("btnAsistencia")
         .addEventListener("click", () => {
 
             alert("Módulo Asistencia próximamente");
+
         });
 
+
+    // =========================
+    // CALIFICACIONES
+    // =========================
 
     document
         .getElementById("btnCalificaciones")
         .addEventListener("click", () => {
 
             alert("Módulo Calificaciones próximamente");
+
         });
 
+
+    // =========================
+    // USUARIOS
+    // =========================
 
     document
         .getElementById("btnUsuarios")
         .addEventListener("click", () => {
 
             alert("Módulo Usuarios próximamente");
+
         });
 
+
+    // =========================
+    // COMUNICADOS
+    // =========================
 
     document
         .getElementById("btnComunicados")
         .addEventListener("click", () => {
 
             alert("Módulo Comunicados próximamente");
+
         });
 
 });
+
