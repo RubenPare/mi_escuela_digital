@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestión de Asignaciones</title>
+
+    <link rel="stylesheet" href="./css/asignaciones.css">
+</head>
+
+<body>
+
+    <!-- ============================================================
+         ENCABEZADO
+    ============================================================ -->
+
+    <header class="encabezado">
+
+        <div class="encabezado-contenido">
+
+            <div>
+                <h1>Gestión de Asignaciones</h1>
+                <p>
+                    Asignación de profesores, materias y cursos
+                </p>
+            </div>
+
+            <a href="./dashboard.html" class="btn-volver">
+                ← Volver al Dashboard
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- ============================================================
+         CONTENIDO PRINCIPAL
+    ============================================================ -->
+
+    <main class="contenedor">
+
+
+        <!-- ========================================================
+             FORMULARIO NUEVA ASIGNACIÓN
+        ========================================================= -->
+
+        <section class="panel">
+
+            <div class="panel-titulo">
+
+                <div>
+                    <h2>Nueva Asignación</h2>
+
+                    <p>
+                        Seleccione el profesor, la materia, el curso
+                        y el ciclo lectivo.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form id="formAsignacion" class="formulario">
+
+
+                <!-- PROFESOR -->
+
+                <div class="campo">
+
+                    <label for="usuario_id">
+                        Profesor
+                    </label>
+
+                    <select id="usuario_id" name="usuario_id" required>
+
+                        <option value="">
+                            Seleccionar profesor
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- MATERIA -->
+
+                <div class="campo">
+
+                    <label for="materia_id">
+                        Materia
+                    </label>
+
+                    <select id="materia_id" name="materia_id" required>
+
+                        <option value="">
+                            Seleccionar materia
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- CURSO -->
+
+                <div class="campo">
+
+                    <label for="curso_id">
+                        Curso
+                    </label>
+
+                    <select id="curso_id" name="curso_id" required>
+
+                        <option value="">
+                            Seleccionar curso
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- CICLO LECTIVO -->
+
+                <div class="campo">
+
+                    <label for="ciclo_lectivo_id">
+                        Ciclo lectivo
+                    </label>
+
+                    <select
+                        id="ciclo_lectivo_id"
+                        name="ciclo_lectivo_id"
+                        required
+                    >
+
+                        <option value="">
+                            Seleccionar ciclo lectivo
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- BOTÓN -->
+
+                <div class="acciones-formulario">
+
+                    <button
+                        type="submit"
+                        id="btnGuardar"
+                        class="btn-principal"
+                    >
+                        Crear Asignación
+                    </button>
+
+                    <button
+                        type="button"
+                        id="btnCancelar"
+                        class="btn-secundario"
+                        style="display: none;"
+                    >
+                        Cancelar
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- MENSAJE -->
+
+            <div
+                id="mensaje"
+                class="mensaje"
+                style="display: none;"
+            ></div>
+
+        </section>
+
+
+
+        <!-- ========================================================
+             LISTADO DE ASIGNACIONES
+        ========================================================= -->
+
+        <section class="panel">
+
+            <div class="panel-titulo">
+
+                <div>
+
+                    <h2>Asignaciones registradas</h2>
+
+                    <p>
+                        Profesores, materias y cursos asignados
+                    </p>
+
+                </div>
+
+
+                <!-- BUSCADOR -->
+
+                <div class="buscador">
+
+                    <input
+                        type="text"
+                        id="buscarAsignacion"
+                        placeholder="Buscar asignación..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- TABLA -->
+
+            <div class="tabla-contenedor">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Profesor</th>
+
+                            <th>Materia</th>
+
+                            <th>Curso</th>
+
+                            <th>Ciclo lectivo</th>
+
+                            <th>Estado</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="tablaAsignaciones">
+
+                        <tr>
+
+                            <td colspan="7" class="sin-datos">
+                                Cargando asignaciones...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ============================================================
+         MODAL CONFIRMACIÓN
+    ============================================================ -->
+
+    <div
+        id="modalConfirmacion"
+        class="modal"
+        style="display: none;"
+    >
+
+        <div class="modal-contenido">
+
+            <h3>Confirmar acción</h3>
+
+            <p id="mensajeConfirmacion">
+                ¿Desea modificar el estado de esta asignación?
+            </p>
+
+            <div class="modal-acciones">
+
+                <button
+                    type="button"
+                    id="btnConfirmar"
+                    class="btn-principal"
+                >
+                    Confirmar
+                </button>
+
+                <button
+                    type="button"
+                    id="btnCerrarModal"
+                    class="btn-secundario"
+                >
+                    Cancelar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================
+         JAVASCRIPT
+    ============================================================ -->
+
+    <script src="./js/config.js"></script>
+    <script src="./js/asignaciones.js"></script>
+
+</body>
+
+</html>

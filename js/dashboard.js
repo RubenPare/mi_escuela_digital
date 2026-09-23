@@ -1,165 +1,157 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const usuarioGuardado = sessionStorage.getItem("usuario");
 
-    if (!usuarioGuardado) {
+const usuarioGuardado = sessionStorage.getItem("usuario");
 
+if (!usuarioGuardado) {
+    window.location.href = "login.html";
+    return;
+}
+
+const usuario = JSON.parse(usuarioGuardado);
+
+// =========================
+// MOSTRAR USUARIO
+// =========================
+
+document.getElementById("nombreUsuario").textContent =
+    `${usuario.nombre} ${usuario.apellido}`;
+
+const roles = {
+    1: "Profesor",
+    2: "Dirección",
+    3: "Administrador",
+    4: "Secretaría",
+    5: "Preceptor"
+};
+
+const nombreRol =
+    roles[usuario.fkrol_id] || "Usuario";
+
+document.getElementById("rolUsuario").textContent =
+    nombreRol;
+
+document.getElementById("tituloBienvenida").textContent =
+    `Bienvenido/a ${usuario.nombre}`;
+
+
+// =========================
+// CERRAR SESIÓN
+// =========================
+
+document
+    .getElementById("btnCerrarSesion")
+    .addEventListener("click", () => {
+
+        sessionStorage.removeItem("usuario");
         window.location.href = "login.html";
 
-        return;
-    }
+    });
 
 
-    const usuario = JSON.parse(usuarioGuardado);
+// =========================
+// ALUMNOS
+// =========================
+
+document
+    .getElementById("btnAlumnos")
+    .addEventListener("click", () => {
+
+        window.location.href = "alumnos.html";
+
+    });
 
 
-    // =========================
-    // MOSTRAR USUARIO
-    // =========================
+// =========================
+// CURSOS
+// =========================
 
-    document.getElementById("nombreUsuario").textContent =
-        `${usuario.nombre} ${usuario.apellido}`;
+document
+    .getElementById("btnCursos")
+    .addEventListener("click", () => {
 
+        window.location.href = "cursos.html";
 
-    const roles = {
-        1: "Profesor",
-        2: "Dirección",
-        3: "Administrador",
-        4: "Secretaría",
-        5: "Preceptor"
-    };
+    });
 
 
-    const nombreRol =
-        roles[usuario.fkrol_id] || "Usuario";
+// =========================
+// MATERIAS
+// =========================
+
+document
+    .getElementById("btnMaterias")
+    .addEventListener("click", () => {
+
+        window.location.href = "materias.html";
+
+    });
 
 
-    document.getElementById("rolUsuario").textContent =
-        nombreRol;
+// =========================
+// INSCRIPCIONES
+// =========================
+
+document
+    .getElementById("btnInscripciones")
+    .addEventListener("click", () => {
+
+        alert("Módulo Inscripciones próximamente");
+
+    });
 
 
-    document.getElementById("tituloBienvenida").textContent =
-        `Bienvenido/a ${usuario.nombre}`;
+// =========================
+// ASISTENCIA
+// =========================
+
+document
+    .getElementById("btnAsistencia")
+    .addEventListener("click", () => {
+
+        alert("Módulo Asistencia próximamente");
+
+    });
 
 
-    // =========================
-    // CERRAR SESIÓN
-    // =========================
+// =========================
+// CALIFICACIONES
+// =========================
 
-    document
-        .getElementById("btnCerrarSesion")
-        .addEventListener("click", () => {
+document
+    .getElementById("btnCalificaciones")
+    .addEventListener("click", () => {
 
-            sessionStorage.removeItem("usuario");
+        alert("Módulo Calificaciones próximamente");
 
-            window.location.href = "login.html";
-
-        });
+    });
 
 
-    // =========================
-    // ALUMNOS
-    // =========================
+// =========================
+// USUARIOS
+// =========================
 
-    document
-        .getElementById("btnAlumnos")
-        .addEventListener("click", () => {
+document
+    .getElementById("btnUsuarios")
+    .addEventListener("click", () => {
 
-            window.location.href = "alumnos.html";
+        alert("Módulo Usuarios próximamente");
 
-        });
-
-
-    // =========================
-    // CURSOS
-    // =========================
-
-    document
-        .getElementById("btnCursos")
-        .addEventListener("click", () => {
-
-            window.location.href = "cursos.html";
-
-        });
+    });
 
 
-    // =========================
-    // MATERIAS
-    // =========================
+// =========================
+// COMUNICADOS
+// =========================
 
-    document
-        .getElementById("btnMaterias")
-        .addEventListener("click", () => {
+document
+    .getElementById("btnComunicados")
+    .addEventListener("click", () => {
 
-            alert("Módulo Materias próximamente");
+        alert("Módulo Comunicados próximamente");
 
-        });
+    });
 
-
-    // =========================
-    // INSCRIPCIONES
-    // =========================
-
-    document
-        .getElementById("btnInscripciones")
-        .addEventListener("click", () => {
-
-            alert("Módulo Inscripciones próximamente");
-
-        });
-
-
-    // =========================
-    // ASISTENCIA
-    // =========================
-
-    document
-        .getElementById("btnAsistencia")
-        .addEventListener("click", () => {
-
-            alert("Módulo Asistencia próximamente");
-
-        });
-
-
-    // =========================
-    // CALIFICACIONES
-    // =========================
-
-    document
-        .getElementById("btnCalificaciones")
-        .addEventListener("click", () => {
-
-            alert("Módulo Calificaciones próximamente");
-
-        });
-
-
-    // =========================
-    // USUARIOS
-    // =========================
-
-    document
-        .getElementById("btnUsuarios")
-        .addEventListener("click", () => {
-
-            alert("Módulo Usuarios próximamente");
-
-        });
-
-
-    // =========================
-    // COMUNICADOS
-    // =========================
-
-    document
-        .getElementById("btnComunicados")
-        .addEventListener("click", () => {
-
-            alert("Módulo Comunicados próximamente");
-
-        });
 
 });
-

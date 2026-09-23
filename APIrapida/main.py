@@ -14,7 +14,10 @@ from sqlalchemy import (
     Integer,
     String,
     DateTime,
-    SmallInteger,Boolean
+    SmallInteger,
+    Boolean,
+    Date,
+    ForeignKey
 )
 
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
@@ -173,6 +176,43 @@ class CursoModel(Base):
         nullable=False,
         default=1
     )
+    
+# ============================================================
+# MODELO INSCRIPCIÓN
+# ============================================================
+
+class InscripcionModel(Base):
+
+    __tablename__ = "inscripciones"
+
+    idinscripciones = Column(
+        Integer,
+        primary_key=True,
+        index=True,
+        autoincrement=True
+    )
+
+    alumno_id = Column(
+        Integer,
+        nullable=False
+    )
+
+    fkcurso_id = Column(
+        Integer,
+        nullable=False
+    )
+
+    fecha_inscripcion = Column(
+        Date,
+        nullable=False
+    )
+
+    estado = Column(
+        String(45),
+        nullable=False
+    )
+
+
 
 
 # ============================================================
@@ -211,7 +251,85 @@ class MateriaModel(Base):
         nullable=False,
         default=True
     )
+    # ============================================================
+# MODELO CICLO LECTIVO
+# ============================================================
 
+class CicloLectivoModel(Base):
+
+    __tablename__ = "ciclos_lectivos"
+
+    idciclos_lectivos = Column(
+        Integer,
+        primary_key=True,
+        index=True,
+        autoincrement=True
+    )
+
+    año = Column(
+        Integer,
+        nullable=False
+    )
+
+    fecha_inicio = Column(
+        DateTime,
+        nullable=False
+    )
+
+    fecha_fin = Column(
+        DateTime,
+        nullable=False
+    )
+
+    activo = Column(
+        SmallInteger,
+        nullable=False,
+        default=1
+    )
+# ============================================================
+# MODELO ASIGNACIÓN
+# ============================================================
+
+class AsignacionModel(Base):
+
+    __tablename__ = "asignaciones"
+
+    idasignaciones = Column(
+        Integer,
+        primary_key=True,
+        index=True,
+        autoincrement=True
+    )
+
+    usuario_id = Column(
+        Integer,
+        ForeignKey("usuarios.idusuarios"),
+        nullable=False
+    )
+
+    materia_id = Column(
+        Integer,
+        ForeignKey("materias.idmaterias"),
+        nullable=False
+    )
+
+    curso_id = Column(
+        Integer,
+        ForeignKey("cursos.idcursos"),
+        nullable=False
+    )
+
+    ciclo_lectivo_id = Column(
+        Integer,
+        ForeignKey("ciclos_lectivos.idciclos_lectivos"),
+        nullable=False
+    )
+
+    activo = Column(
+        SmallInteger,
+        nullable=False,
+        default=1
+    )
 
 
 
@@ -285,6 +403,13 @@ def cursos_page():
     return FileResponse(
         BASE_DIR / "cursos.html"
     )
+@app.get("/asignaciones.html")
+def asignaciones():
+    return FileResponse(
+        BASE_DIR / "asignaciones.html"
+
+                   )
+
 @app.get("/alumnos.html")
 def alumnos_page():
     return FileResponse(
@@ -347,6 +472,15 @@ class MateriaRegistro(BaseModel):
     nombre: str
 
 
+
+class AsignacionRegistro(BaseModel):
+
+    usuario_id: int
+    materia_id: int
+    curso_id: int
+    ciclo_lectivo_id: int   
+
+
 # ============================================================
 # INICIO / PRUEBA API
 # ============================================================
@@ -364,6 +498,31 @@ def inicio():
 # USUARIOS
 # ============================================================
 
+@app.get("/usuarios")
+def listar_usuarios(
+    db: Session = Depends(get_db)
+):
+
+    usuarios = db.query(
+        UsuarioModel
+    ).filter(
+        UsuarioModel.activo == 1
+    ).order_by(
+        UsuarioModel.apellido,
+        UsuarioModel.nombre
+    ).all()
+
+    return [
+        {
+            "idusuarios": usuario.idusuarios,
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido,
+            "mail": usuario.mail,
+            "fkrol_id": usuario.fkrol_id,
+            "activo": usuario.activo
+        }
+        for usuario in usuarios
+    ]
 @app.post("/usuarios")
 def registrar_usuario(
     usuario: UsuarioRegistro,
@@ -1049,7 +1208,194 @@ def activar_materia(
             "activo": materia_db.activo
         }
     }
+# ============================================================
+# CICLOS LECTIVOS
+# ============================================================
 
+@app.get("/ciclos_lectivos")
+def listar_ciclos_lectivos(db: Session = Depends(get_db)):
+
+    ciclos = db.query(CicloLectivoModel).all()
+
+    return [
+        {
+            "idciclos_lectivos": ciclo.idciclos_lectivos,
+            "año": ciclo.año,
+            "fecha_inicio": ciclo.fecha_inicio,
+            "fecha_fin": ciclo.fecha_fin,
+            "activo": ciclo.activo
+        }
+        for ciclo in ciclos
+    ]
+# ============================================================
+# ASIGNACIONES - LISTAR
+# ============================================================
+
+@app.get("/asignaciones")
+def listar_asignaciones(
+    db: Session = Depends(get_db)
+):
+
+    asignaciones = db.query(
+        AsignacionModel
+    ).all()
+
+    return [
+
+    {
+        "idasignaciones": asignacion.idasignaciones,
+        "usuario_id": asignacion.usuario_id,
+        "materia_id": asignacion.materia_id,
+        "curso_id": asignacion.curso_id,
+        "ciclo_lectivo_id": asignacion.ciclo_lectivo_id,
+        "activo": asignacion.activo
+    }
+
+    for asignacion in asignaciones
+]
+
+
+# ============================================================
+# ASIGNACIONES - CREAR
+# ============================================================
+
+@app.post("/asignaciones")
+def crear_asignacion(
+    asignacion: AsignacionRegistro,
+    db: Session = Depends(get_db)
+):
+
+    nueva_asignacion = AsignacionModel(
+
+    usuario_id=asignacion.usuario_id,
+    materia_id=asignacion.materia_id,
+    curso_id=asignacion.curso_id,
+    ciclo_lectivo_id=asignacion.ciclo_lectivo_id,
+    activo=1
+
+)
+
+    db.add(nueva_asignacion)
+
+    db.commit()
+
+    db.refresh(nueva_asignacion)
+
+    return {
+
+        "mensaje": "Asignación creada correctamente",
+
+        "asignacion": {
+
+            "idasignaciones": nueva_asignacion.idasignaciones,
+            "usuario_id": nueva_asignacion.usuario_id,
+            "materia_id": nueva_asignacion.materia_id,
+            "curso_id": nueva_asignacion.curso_id,
+            "ciclo_lectivo_id": nueva_asignacion.ciclo_lectivo_id,
+            "activo": nueva_asignacion.activo
+
+        }
+
+    }
+
+
+# ============================================================
+# ASIGNACIONES - MODIFICAR
+# ============================================================
+
+@app.put("/asignaciones/{asignacion_id}")
+def modificar_asignacion(
+    asignacion_id: int,
+    asignacion: AsignacionRegistro,
+    db: Session = Depends(get_db)
+):
+
+    asignacion_db = db.query(
+        AsignacionModel
+    ).filter(
+        AsignacionModel.idasignaciones == asignacion_id
+    ).first()
+
+    if not asignacion_db:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Asignación no encontrada"
+        )
+
+    asignacion_db.usuario_id = asignacion.usuario_id
+    asignacion_db.materia_id = asignacion.materia_id
+    asignacion_db.curso_id = asignacion.curso_id
+    asignacion_db.ciclo_lectivo_id = asignacion.ciclo_lectivo_id
+
+    db.commit()
+
+    db.refresh(asignacion_db)
+
+    return {
+
+        "mensaje": "Asignación modificada correctamente",
+
+        "asignacion": {
+
+            "idasignaciones": asignacion_db.idasignaciones,
+            "usuario_id": asignacion_db.usuario_id,
+            "materia_id": asignacion_db.materia_id,
+            "curso_id": asignacion_db.curso_id,
+            "ciclo_lectivo_id": asignacion_db.ciclo_lectivo_id,
+            "activo": asignacion_db.activo
+
+        }
+
+    }
+
+
+# ============================================================
+# ASIGNACIONES - ACTIVAR / DESACTIVAR
+# ============================================================
+
+@app.put("/asignaciones/{asignacion_id}/estado")
+def cambiar_estado_asignacion(
+    asignacion_id: int,
+    db: Session = Depends(get_db)
+):
+
+    asignacion = db.query(
+        AsignacionModel
+    ).filter(
+        AsignacionModel.idasignaciones == asignacion_id
+    ).first()
+
+    if not asignacion:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Asignación no encontrada"
+        )
+
+    if asignacion.activo == 1:
+
+        asignacion.activo = 0
+
+        mensaje = "Asignación desactivada correctamente"
+
+    else:
+
+        asignacion.activo = 1
+
+        mensaje = "Asignación activada correctamente"
+
+    db.commit()
+
+    db.refresh(asignacion)
+
+    return {
+
+        "mensaje": mensaje,
+        "idasignaciones": asignacion.idasignaciones,
+        "activo": asignacion.activo
+
+    }
 
 
 
