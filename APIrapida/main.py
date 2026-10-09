@@ -27,11 +27,47 @@ from sqlalchemy.orm import declarative_base, sessionmaker, Session
 # CONFIGURACIÓN MYSQL
 # ============================================================
 
-DATABASE_URL = (
-    "mysql+pymysql://root:19741026@localhost:3306/gestion_escolar"
-)
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL no está configurada")
 
 engine = create_engine(DATABASE_URL)
+@app.get("/diagnostico-db")
+def diagnostico_db():
+    from sqlalchemy import text
+    from sqlalchemy.engine import make_url
+
+    url = make_url(DATABASE_URL)
+
+    try:
+        with engine.connect() as conexion:
+            resultado = conexion.execute(
+                text("SELECT DATABASE(), @@hostname")
+            ).fetchone()
+
+        return {
+            "host_configurado": url.host,
+            "puerto_configurado": url.port,
+            "base_configurada": url.database,
+            "conexion_exitosa": True,
+            "base_conectada": resultado[0],
+            "servidor_mysql": resultado[1]
+        }
+
+    except Exception as error:
+        return {
+            "host_configurado": url.host,
+            "puerto_configurado": url.port,
+            "base_configurada": url.database,
+            "conexion_exitosa": False,
+            "error": str(error)
+        }
 
 SessionLocal = sessionmaker(
     autocommit=False,
@@ -486,13 +522,46 @@ class AsignacionRegistro(BaseModel):
 # ============================================================
 
 @app.get("/")
+
+
+
 def inicio():
 
     return {
         "mensaje": "API conectada correctamente",
         "base_de_datos": "gestion_escolar"
     }
+@app.get("/diagnostico-db")
+def diagnostico_db():
+    from sqlalchemy import text
+    from sqlalchemy.engine import make_url
 
+    url = make_url(DATABASE_URL)
+
+    try:
+        with engine.connect() as conexion:
+            resultado = conexion.execute(
+                text("SELECT DATABASE(), @@hostname")
+            ).fetchone()
+
+        return {
+            "host_configurado": url.host,
+            "puerto_configurado": url.port,
+            "base_configurada": url.database,
+            "conexion_exitosa": True,
+            "base_conectada": resultado[0],
+            "servidor_mysql": resultado[1],
+        }
+
+    except Exception as error:
+        return {
+            "host_configurado": url.host,
+            "puerto_configurado": url.port,
+            "base_configurada": url.database,
+            "conexion_exitosa": False,
+            "tipo_error": type(error).__name__,
+            "detalle_error": str(error)[:300],
+        }
 
 # ============================================================
 # USUARIOS
