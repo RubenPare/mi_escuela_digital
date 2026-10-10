@@ -37,7 +37,20 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL no está configurada")
 
-engine = create_engine(DATABASE_URL)
+
+from sqlalchemy.engine import make_url
+
+url_db = make_url(DATABASE_URL)
+
+# Eliminar parámetros SSL de la URL y configurar SSL
+# mediante los argumentos compatibles con PyMySQL.
+url_limpia = url_db.difference_update_query(["ssl"])
+
+engine = create_engine(
+    url_limpia,
+    connect_args={"ssl": {}}
+)
+
 
 
 SessionLocal = sessionmaker(
