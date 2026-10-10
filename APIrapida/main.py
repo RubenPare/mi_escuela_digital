@@ -38,36 +38,7 @@ if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL no está configurada")
 
 engine = create_engine(DATABASE_URL)
-@app.get("/diagnostico-db")
-def diagnostico_db():
-    from sqlalchemy import text
-    from sqlalchemy.engine import make_url
 
-    url = make_url(DATABASE_URL)
-
-    try:
-        with engine.connect() as conexion:
-            resultado = conexion.execute(
-                text("SELECT DATABASE(), @@hostname")
-            ).fetchone()
-
-        return {
-            "host_configurado": url.host,
-            "puerto_configurado": url.port,
-            "base_configurada": url.database,
-            "conexion_exitosa": True,
-            "base_conectada": resultado[0],
-            "servidor_mysql": resultado[1]
-        }
-
-    except Exception as error:
-        return {
-            "host_configurado": url.host,
-            "puerto_configurado": url.port,
-            "base_configurada": url.database,
-            "conexion_exitosa": False,
-            "error": str(error)
-        }
 
 SessionLocal = sessionmaker(
     autocommit=False,
@@ -251,6 +222,7 @@ class InscripcionModel(Base):
 
 
 
+
 # ============================================================
 # FASTAPI
 # ============================================================
@@ -260,6 +232,40 @@ app = FastAPI(
     description="API de gestión escolar",
     version="1.0.0"
 )
+
+
+@app.get("/diagnostico-db")
+def diagnostico_db():
+    from sqlalchemy import text
+    from sqlalchemy.engine import make_url
+
+    url = make_url(DATABASE_URL)
+
+    try:
+        with engine.connect() as conexion:
+            resultado = conexion.execute(
+                text("SELECT DATABASE(), @@hostname")
+            ).fetchone()
+
+        return {
+            "host_configurado": url.host,
+            "puerto_configurado": url.port,
+            "base_configurada": url.database,
+            "conexion_exitosa": True,
+            "base_conectada": resultado[0],
+            "servidor_mysql": resultado[1]
+        }
+
+    except Exception as error:
+        return {
+            "host_configurado": url.host,
+            "puerto_configurado": url.port,
+            "base_configurada": url.database,
+            "conexion_exitosa": False,
+            "tipo_error": type(error).__name__,
+            "detalle_error": str(error)[:300]
+        }
+
 
 
 # ============================================================
@@ -531,37 +537,7 @@ def inicio():
         "mensaje": "API conectada correctamente",
         "base_de_datos": "gestion_escolar"
     }
-@app.get("/diagnostico-db")
-def diagnostico_db():
-    from sqlalchemy import text
-    from sqlalchemy.engine import make_url
 
-    url = make_url(DATABASE_URL)
-
-    try:
-        with engine.connect() as conexion:
-            resultado = conexion.execute(
-                text("SELECT DATABASE(), @@hostname")
-            ).fetchone()
-
-        return {
-            "host_configurado": url.host,
-            "puerto_configurado": url.port,
-            "base_configurada": url.database,
-            "conexion_exitosa": True,
-            "base_conectada": resultado[0],
-            "servidor_mysql": resultado[1],
-        }
-
-    except Exception as error:
-        return {
-            "host_configurado": url.host,
-            "puerto_configurado": url.port,
-            "base_configurada": url.database,
-            "conexion_exitosa": False,
-            "tipo_error": type(error).__name__,
-            "detalle_error": str(error)[:300],
-        }
 
 # ============================================================
 # USUARIOS
